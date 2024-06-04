@@ -10,7 +10,7 @@ public class DisableSleepHandler implements EntitySleepEvents.AllowSleeping {
     @Nullable
     @Override
     public PlayerEntity.SleepFailureReason allowSleep(PlayerEntity player, BlockPos sleepingPos) {
-        player.sendMessage(Text.literal("Du kannst nicht schlafen"));
+        player.sendMessage(Text.literal("Hier wird nicht geschlafen du Hurensohn"));
         return PlayerEntity.SleepFailureReason.OTHER_PROBLEM;
     }
 }
