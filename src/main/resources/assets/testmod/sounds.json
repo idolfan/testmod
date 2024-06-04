@@ -1,0 +1,7 @@
+{
+  "creeper_alarm": {
+    "sounds": [
+      "testmod:creeper_alarm"
+    ]
+  }
+}
