@@ -1,0 +1,37 @@
+-| Schalfen ausschalten | -> DisableSleepHandler
+- (IN PROGRESS) Monster spawnen (manchmal) stärker
+	-> | Creeper entweder Nukes, oder schnell
+	-> | Zombies haben chancen auf Effekte, Slowness erhöht andere Effektstärken
+	-> Hexxit-artig
+	-> Effekte?
+	-> Charged Creeper?
+	-> Tuen Giants irgendwas? Große Slimes?
+		-> Giants als Spawner, vielleicht Agro auf Dörfer
+	-> "Bosse"? -> Wither? EnderDrache?
+- Wellen
+	-> Verteidigen
+	-> Creeper machen Sachen :))
+	-> Werden stärker bei Erfolg?
+	- Spieler schwächer anfangs, stärker durch geschafte Wellen
+	-> Themen ( Nether, genau, ... )
+
+
+- (IN PROGRESS) World Border vergrößert sich durch Opfern
+	-> | Items opfern durch verbrennen ( Lava / Feuer..) | -> ExtendWorldBorderHandler
+	- manche Opfer bringen auch andere Sachen ( Diamanten oder so?!?)
+	- Villager um Dorf bringen irgendwas ( mit Freiraum -> Heatmap )
+	- Tier Opfer ? :DDD)))))
+	-> Altar statt nur Feuer
+	-> () Formel für Effektivität einzelner Items
+		-> 1/(sqrt(i+1)) ? 
+			-> 1000 Stacks => 503
+			    100 Stacks => 157
+			     10 Stacks => 48
+			      1 Stack  => 13,7
+	-> Schrumpfen über Zeit ?
+		-> Vielleicht bei zu großer Zone ?
+	- Altar upgraden für mehr max Ausdehnung
+- Mending entfernen
+- Meteroiten? :)
+- Loot von Dungeons anpassen / Eigene Dungeons
+	- Debuffs ? MiningFatigue etc?
