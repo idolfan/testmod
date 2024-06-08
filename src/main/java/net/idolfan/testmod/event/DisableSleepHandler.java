@@ -11,6 +11,8 @@ public class DisableSleepHandler implements EntitySleepEvents.AllowSleeping {
     @Override
     public PlayerEntity.SleepFailureReason allowSleep(PlayerEntity player, BlockPos sleepingPos) {
         player.sendMessage(Text.literal("Hier wird nicht geschlafen du Hurensohn"));
+        player.setHealth(player.getHealth() - 4);
+        player.setOnFire(true);
         return PlayerEntity.SleepFailureReason.OTHER_PROBLEM;
     }
 }
