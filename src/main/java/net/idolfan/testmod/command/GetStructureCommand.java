@@ -1,8 +1,10 @@
 package net.idolfan.testmod.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.idolfan.testmod.structures.StructureHandler;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.BlockPosArgumentType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -18,6 +20,8 @@ import java.util.Map;
 
 public class GetStructureCommand {
 
+
+
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher,
                                 CommandRegistryAccess commandRegistryAccess,
                                 CommandManager.RegistrationEnvironment registrationEnvironment) {
@@ -25,25 +29,20 @@ public class GetStructureCommand {
 
         dispatcher.register(CommandManager.literal("getstructure").then(
                 CommandManager.argument("from", BlockPosArgumentType.blockPos())
-                        .then(CommandManager.argument("to", BlockPosArgumentType.blockPos())
+                        .then(CommandManager.argument("to", BlockPosArgumentType.blockPos()).then(CommandManager.argument("name", StringArgumentType.string())
                                 .executes(context -> execute(context, BlockPosArgumentType.getBlockPos(context, "from"),
-                                        BlockPosArgumentType.getBlockPos(context, "to"))))));
+                                        BlockPosArgumentType.getBlockPos(context, "to"), StringArgumentType.getString(context, "name")))))));
 
     }
 
-    private static int execute(CommandContext<ServerCommandSource> context, BlockPos fromPos, BlockPos toPos)
+    private static int execute(CommandContext<ServerCommandSource> context, BlockPos fromPos, BlockPos toPos, String name)
             throws CommandSyntaxException {
         PlayerEntity player = context.getSource().getPlayer();
         World world = context.getSource().getWorld();
-        Map<Vec3i, String> structure = new HashMap<>();
+        HashMap<int[], String> structure = StructureHandler.getStructure(world, new int[]{fromPos.getX(), fromPos.getY(), fromPos.getZ()}, new int[]{
+                toPos.getX(), toPos.getY(), toPos.getZ()}, new String[]{"Air"});
+        StructureHandler.structures.put(name, structure);
 
-        Box box = new Box(fromPos.getX(), fromPos.getY(), fromPos.getZ(), toPos.getX(), toPos.getY(), toPos.getZ());
-        BlockPos.stream(box).forEach(pos -> {
-            structure.put(pos, world.getBlockState(pos).getBlock().getName().getString());
-        });
-        for (Vec3i pos : structure.keySet()) {
-            System.out.println(pos.getX() + " " + structure.get(pos));
-        }
         return 1;
     }
 }
