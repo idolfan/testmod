@@ -10,7 +10,7 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.idolfan.testmod.command.GetSacrificeCommand;
 import net.idolfan.testmod.command.GetStructureCommand;
 import net.idolfan.testmod.event.*;
-import net.idolfan.testmod.structures.sacrificeAltar;
+import net.idolfan.testmod.structures.activateAltarHandler;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.world.World;
@@ -30,7 +30,7 @@ public class TestMod implements ModInitializer {
 		EntitySleepEvents.ALLOW_SLEEPING.register(new DisableSleepHandler());
 		ServerWorldEvents.LOAD.register(new GetWorldHandler());
 		ServerEntityEvents.ENTITY_UNLOAD.register(new ExtendWorldBorderHandler());
-		UseBlockCallback.EVENT.register(new sacrificeAltar());
+		UseBlockCallback.EVENT.register(new activateAltarHandler());
 
 		CommandRegistrationCallback.EVENT.register(GetSacrificeCommand::register);
 		CommandRegistrationCallback.EVENT.register(GetStructureCommand::register);

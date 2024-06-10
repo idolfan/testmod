@@ -1,6 +1,5 @@
 package net.idolfan.testmod.structures;
 
-import com.jcraft.jorbis.Block;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -16,26 +15,45 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class sacrificeAltar implements UseBlockCallback {
+public class activateAltarHandler implements UseBlockCallback {
 
-    //public static HashMap<int[], String> altarStructure;
     public static Structure altarStructure;
     public static ArrayList<Altar> existingAltars = new ArrayList<>();
 
     public static String requiredItemName = Items.STICK.getName().getString();
 
     private static int[][] rotationArrayPositions = new int[][]{
+            // Rotation
             {0, 1, 2},
             {2, 1, 0},
             {0, 1, 2},
-            {2, 1, 0}
+            {2, 1, 0},
+            // x-Mirrored rotations
+            {0, 1, 2},
+            {2, 1, 0},
+            {0, 1, 2},
+            {2, 1, 0},
+            // z-Mirrored rotations
+            {0, 1, 2},
+            {2, 1, 0},
+            {0, 1, 2},
+            {2, 1, 0},
     };
 
     private static int[][] rotationFactors = new int[][]{
             {1, 1, 1},
             {1, 1, -1},
             {-1, 1, -1},
-            {-1, 1, 1}
+            {-1, 1, 1},
+            {-1, 1, 1},
+            {-1, 1, -1},
+            {1, 1, -1},
+            {1, 1, 1},
+            {1, 1, -1},
+            {1, 1, 1},
+            {-1, 1, 1},
+            {-1, 1, -1},
+
     };
 
     @Override
@@ -68,32 +86,32 @@ public class sacrificeAltar implements UseBlockCallback {
             return ActionResult.PASS;
         }
 
-        //Altar foundAltar = null;
+        Altar foundAltar = null;
         boolean match = false;
 
         int[] absolutPositionOfHitBlock = new int[]{blockPosition.getX(), blockPosition.getY(), blockPosition.getZ()};
 
-        HashMap<int[], String[]>[] changesNeededForPossiblePositions = new HashMap[possiblePositions.size() * 4];
+        HashMap<int[], String[]>[] changesNeededForPossiblePositions = new HashMap[possiblePositions.size() * rotationArrayPositions.length];
 
         System.out.println("Starting to search for match...");
 
         for (int i = 0; i < possiblePositions.size(); i++) {
 
-            for (int d = 0; d < 4; d++) {
+            for (int d = 0; d < rotationArrayPositions.length; d++) {
 
                 System.out.println("Checking position " + i);
-                changesNeededForPossiblePositions[i * 4 + d] = new HashMap<>();
+                changesNeededForPossiblePositions[i * rotationArrayPositions.length + d] = new HashMap<>();
 
-                HashMap<int[], String[]> changesNeeded = changesNeededForPossiblePositions[i * 4 + d];
+                HashMap<int[], String[]> changesNeeded = changesNeededForPossiblePositions[i * rotationArrayPositions.length + d];
 
                 int[] relativePosition = possiblePositions.get(i);
                 int[] rotationIndexes = rotationArrayPositions[d];
                 int[] rotationFactor = rotationFactors[d];
 
                 int[] absolutStartPosition = new int[]{
-                        absolutPositionOfHitBlock[0] - relativePosition[rotationIndexes[0]]  * rotationFactor[0],
+                        absolutPositionOfHitBlock[0] - relativePosition[rotationIndexes[0]] * rotationFactor[0],
                         absolutPositionOfHitBlock[1] - relativePosition[rotationIndexes[1]] * rotationFactor[1],
-                        absolutPositionOfHitBlock[2] - relativePosition[rotationIndexes[2]]  * rotationFactor[2]
+                        absolutPositionOfHitBlock[2] - relativePosition[rotationIndexes[2]] * rotationFactor[2]
                 };
 
                 for (int[] position : altarStructure.blocks.keySet()) {
@@ -115,18 +133,33 @@ public class sacrificeAltar implements UseBlockCallback {
 
                 boolean matchesStructure = changesNeeded.isEmpty();
                 if (matchesStructure) {
+                    System.out.println("Structure sizes: " + "[" + altarStructure.sizes[0] + "," + altarStructure.sizes[1] + "," + altarStructure.sizes[2] + "]");
+                    foundAltar = new Altar(new double[]{
+                            absolutStartPosition[0] + 0.5 + 0.5 * rotationFactor[0] * ( altarStructure.sizes[rotationIndexes[0]] - 1),
+                            absolutStartPosition[1] + 0.5 + 0.5 * rotationFactor[1] * ( altarStructure.sizes[rotationIndexes[1]] - 1),
+                            absolutStartPosition[2] + 0.5 + 0.5 * rotationFactor[2] * ( altarStructure.sizes[rotationIndexes[2]] - 1)
+                    }, 2);
                     match = true;
                     System.out.println("Matches Structure with rotation " + d);
                     i = possiblePositions.size();
-                    d = 4;
+                    d = rotationArrayPositions.length;
                     break;
                 }
             }
         }
 
         if (match) {
-            player.sendMessage(Text.literal("Altar recognized and activated."));
-            /// Add altar
+            Altar finalFoundAltar = foundAltar;
+            List<Altar> sameAltar = existingAltars.stream().filter((altar) -> {
+                return altar.compare(finalFoundAltar);
+            }).toList();
+            System.out.println("Same altar size: " + sameAltar.size());
+            if (sameAltar.isEmpty()) {
+                existingAltars.add(foundAltar);
+                player.sendMessage(Text.literal("Altar recognized and activated."));
+            } else {
+                player.sendMessage(Text.literal("Altar already active"));
+            }
             return ActionResult.PASS;
         }
 
