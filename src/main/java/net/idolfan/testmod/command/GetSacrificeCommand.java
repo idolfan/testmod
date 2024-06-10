@@ -1,21 +1,22 @@
 package net.idolfan.testmod.command;
 
+import com.google.common.collect.ImmutableList;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.idolfan.testmod.event.ExtendWorldBorderHandler;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.DifficultyCommand;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
-import net.minecraft.world.Difficulty;
 
 import java.util.HashMap;
 
@@ -25,12 +26,6 @@ public class GetSacrificeCommand {
         dispatcher.register(CommandManager.literal("sacrifice").then(
                 CommandManager.argument("name", StringArgumentType.string()).executes(
                         context -> GetSacrificeCommand.execute(context, StringArgumentType.getString(context, "name")))));
-
-        /*LiteralArgumentBuilder<ServerCommandSource> literalArgumentBuilder = CommandManager.literal("sacrifice");
-        for (String s : ExtendWorldBorderHandler.sacrificedAmounts.keySet()) {
-            literalArgumentBuilder.then((ArgumentBuilder<ServerCommandSource, ?>)CommandManager.literal(s).executes(context -> GetSacrificeCommand.execute(context, s)));
-        }
-        dispatcher.register(literalArgumentBuilder);*/
     }
 
     private static int execute(CommandContext<ServerCommandSource> context, String name) throws CommandSyntaxException {

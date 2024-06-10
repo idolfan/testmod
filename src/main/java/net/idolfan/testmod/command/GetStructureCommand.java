@@ -11,12 +11,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class GetStructureCommand {
 
