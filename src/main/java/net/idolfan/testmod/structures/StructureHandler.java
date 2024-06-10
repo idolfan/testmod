@@ -1,23 +1,21 @@
 package net.idolfan.testmod.structures;
 
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
 public class StructureHandler {
 
-    public static HashMap<String, HashMap<int[], String>> structures = new HashMap<>();
+    public static HashMap<String, Structure> structures = new HashMap<>();
 
     /**
      * @return A <code>Map(position, blockname)</code> relative to <code>from</code> with positions in direction <code>to</code>
      */
-    public static HashMap<int[], String> getStructure(World world, int[] from, int[] to, String[] ignoreBlocks) {
-        HashMap<int[], String> structure = new HashMap<>();
+    public static Structure getStructure(World world, int[] from, int[] to, String[] ignoreBlocks) {
+        HashMap<int[], String> structureBlocks = new HashMap<>();
         ArrayList<String> ignoreBlockList = new ArrayList<>(Arrays.asList(ignoreBlocks));
 
         int[] relativePos = new int[]{
@@ -38,7 +36,8 @@ public class StructureHandler {
                     String blockname = world.getBlockState(new BlockPos(x + from[0], y + from[1], z + from[2])).getBlock().getName().getString();
 
                     if (!ignoreBlockList.contains(blockname)) {
-                        structure.put(new int[]{x, y, z}, blockname);
+
+                        structureBlocks.put(new int[]{x, y, z}, blockname);
                         System.out.println("[" + x + "," + y + "," + z + "]: " + blockname);
                     }
 
@@ -46,6 +45,11 @@ public class StructureHandler {
             }
         }
         System.out.println("-------");
+
+        // TODO: Create seperate Command for this
+        Structure structure = new Structure(structureBlocks);
+        sacrificeAltar.altarStructure = structure;
+
         return structure;
     }
 

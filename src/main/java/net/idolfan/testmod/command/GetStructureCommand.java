@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.idolfan.testmod.structures.Structure;
 import net.idolfan.testmod.structures.StructureHandler;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.BlockPosArgumentType;
@@ -36,7 +37,7 @@ public class GetStructureCommand {
             throws CommandSyntaxException {
         PlayerEntity player = context.getSource().getPlayer();
         World world = context.getSource().getWorld();
-        HashMap<int[], String> structure = StructureHandler.getStructure(world, new int[]{fromPos.getX(), fromPos.getY(), fromPos.getZ()}, new int[]{
+        Structure structure = StructureHandler.getStructure(world, new int[]{fromPos.getX(), fromPos.getY(), fromPos.getZ()}, new int[]{
                 toPos.getX(), toPos.getY(), toPos.getZ()}, new String[]{"Air"});
         StructureHandler.structures.put(name, structure);
 
